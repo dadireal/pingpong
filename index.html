@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PingPong Online</title>
+  <meta name="description" content="Play real-time ping pong with friends directly in the browser. No server needed — just share a Room ID!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════ LOBBY ═══════════════════════════════════ -->
+  <div id="lobby" class="screen active">
+    <div class="lobby-bg">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+
+    <div class="lobby-card">
+      <div class="logo">
+        <span class="logo-icon">🏓</span>
+        <h1>PingPong <span class="accent">Online</span></h1>
+      </div>
+      <p class="tagline">Play with friends — no account needed</p>
+
+      <div class="tabs">
+        <button class="tab active" id="tab-host" onclick="switchTab('host')">Host Game</button>
+        <button class="tab" id="tab-join" onclick="switchTab('join')">Join Game</button>
+      </div>
+
+      <!-- Host Panel -->
+      <div id="panel-host" class="panel active">
+        <p class="panel-hint">Share your <strong>Room ID</strong> with a friend</p>
+        <div class="room-display">
+          <span id="my-room-id" class="room-id-text">Generating...</span>
+          <button class="copy-btn" id="copy-btn" onclick="copyRoomId()" title="Copy Room ID">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+        <div id="host-status" class="status-line">🔵 Waiting for peer connection...</div>
+      </div>
+
+      <!-- Join Panel -->
+      <div id="panel-join" class="panel">
+        <p class="panel-hint">Enter the Room ID from your friend</p>
+        <div class="input-row">
+          <input id="join-room-input" type="text" placeholder="Room ID" maxlength="20" spellcheck="false" autocomplete="off" />
+          <button class="btn-primary" id="join-btn" onclick="joinGame()">Join</button>
+        </div>
+        <div id="join-status" class="status-line">&nbsp;</div>
+      </div>
+
+      <div class="controls-hint">
+        <span>⬆⬇ Arrow keys &nbsp;|&nbsp; W/S keys</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ GAME ══════════════════════════════════ -->
+  <div id="game-screen" class="screen">
+    <header class="game-header">
+      <div class="score-block" id="score-left-block">
+        <span class="player-label" id="label-left">YOU</span>
+        <span class="score" id="score-left">0</span>
+      </div>
+
+      <div class="center-info">
+        <span class="round-badge" id="round-badge">ROUND 1</span>
+        <button class="leave-btn" onclick="leaveGame()" title="Leave game">✕ Leave</button>
+      </div>
+
+      <div class="score-block right" id="score-right-block">
+        <span class="score" id="score-right">0</span>
+        <span class="player-label" id="label-right">FRIEND</span>
+      </div>
+    </header>
+
+    <main class="canvas-wrapper">
+      <canvas id="canvas"></canvas>
+      <div id="overlay" class="canvas-overlay hidden">
+        <p id="overlay-msg" class="overlay-msg"></p>
+        <p id="overlay-sub" class="overlay-sub"></p>
+      </div>
+    </main>
+
+    <footer class="game-footer">
+      <span id="conn-status" class="conn-dot connected">● Connected</span>
+      <span class="key-hint">↑↓ / W S — move paddle</span>
+    </footer>
+  </div>
+
+  <!-- PeerJS from CDN -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
